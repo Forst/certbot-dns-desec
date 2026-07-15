@@ -142,3 +142,5 @@ desec-secret.ini
 tmp/
 venv/
 
+# Snap files
+*.snap

@@ -1,19 +1,21 @@
+import os
+
 from setuptools import setup
 from setuptools import find_packages
 
 version = "1.3.2"
 
 install_requires = [
-    "certbot",
     "dnspython",
     "requests",
 ]
 
-# read the contents of your README file
-from os import path
+if not os.environ.get("SNAP_BUILD"):
+    install_requires.append("certbot")
 
-this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, "README.md")) as f:
+# read the contents of your README file
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, "README.md")) as f:
     long_description = f.read()
 
 setup(

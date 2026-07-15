@@ -1,1 +1,1 @@
-pyOpenSSL < 24
+pyOpenSSL < 26

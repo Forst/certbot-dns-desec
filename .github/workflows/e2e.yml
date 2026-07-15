@@ -55,7 +55,7 @@ jobs:
         curl -X POST https://desec.io/api/v1/domains/ \
         --header "Authorization: Token $TOKEN" \
         --header "Content-Type: application/json" --data @- <<< \
-        "{\"name\": \"certbot-$CERTBOT-python-$PYTHON-$DOMAIN\"}"
+        "{\"name\": \"$DOMAIN\"}"
         sleep 80  # wait for deSEC to propagate changes
       env:
         DOMAIN: ${{secrets.DESEC_DOMAIN}}
@@ -83,8 +83,8 @@ jobs:
         --server https://acme-v02.api.letsencrypt.org/directory \
         --agree-tos \
         --dry-run \
-        -d "certbot-$CERTBOT-python-$PYTHON-$DOMAIN" \
-        -d "*.certbot-$CERTBOT-python-$PYTHON-$DOMAIN"
+        -d "certbot-$CERTBOT-python-$PYTHON.$DOMAIN" \
+        -d "*.certbot-$CERTBOT-python-$PYTHON.$DOMAIN"
       shell: bash
       env:
         DOMAIN: ${{secrets.DESEC_DOMAIN}}
@@ -97,8 +97,8 @@ jobs:
       run: |
         PYTHON=$(echo $PYTHON | sed "s/\./-/g")
         CERTBOT=$(echo $CERTBOT | sed "s/\./-/g")
-        dig @ns1.desec.io TXT _acme-challenge.certbot-$CERTBOT-python-$PYTHON-$DOMAIN
-        dig @ns2.desec.org TXT _acme-challenge.certbot-$CERTBOT-python-$PYTHON-$DOMAIN
+        dig @ns1.desec.io TXT _acme-challenge.certbot-$CERTBOT-python-$PYTHON.$DOMAIN
+        dig @ns2.desec.org TXT _acme-challenge.certbot-$CERTBOT-python-$PYTHON.$DOMAIN
         cat tmp/certbot/logs/letsencrypt.log
       env:
         DOMAIN: ${{secrets.DESEC_DOMAIN}}

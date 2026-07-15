@@ -54,11 +54,20 @@ jobs:
       run: |
         PYTHON=$(echo $PYTHON | sed "s/\./-/g")
         CERTBOT=$(echo $CERTBOT | sed "s/\./-/g")
-        curl -X POST https://desec.io/api/v1/domains/ \
-        --header "Authorization: Token $TOKEN" \
-        --header "Content-Type: application/json" --data @- <<< \
-        "{\"name\": \"$DOMAIN\"}"
-        sleep 80  # wait for deSEC to propagate changes
+        if ! curl \
+            --fail-with-body \
+            --header "Authorization: Token ${TOKEN}" \
+            "https://desec.io/api/v1/domains/${DOMAIN}"
+        then
+            curl \
+                -X POST \
+                --fail-with-body \
+                --header "Authorization: Token ${TOKEN}" \
+                --header "Content-Type: application/json" --data @- <<< \
+                "{\"name\": \"${DOMAIN}\"}" \
+                https://desec.io/api/v1/domains/
+            sleep 80  # wait for deSEC to propagate changes
+        fi
       env:
         DOMAIN: ${{secrets.DESEC_DOMAIN}}
         CERTBOT: ${{matrix.certbot-version}}

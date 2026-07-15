@@ -57,7 +57,7 @@ jobs:
         if ! curl \
             --fail-with-body \
             --header "Authorization: Token ${TOKEN}" \
-            "https://desec.io/api/v1/domains/${DOMAIN}"
+            "https://desec.io/api/v1/domains/${DOMAIN}/"
         then
             curl \
                 -X POST \

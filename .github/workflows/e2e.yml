@@ -44,7 +44,7 @@ jobs:
     - name: Install
       run: |
         sudo apt-get install -y dnsutils
-        pip3 install certbot~=$CERTBOT_VERSION acme~=$CERTBOT_VERSION .
+        pip3 install certbot~=$CERTBOT_VERSION acme~=$CERTBOT_VERSION -c constraints.txt .
         pip3 freeze
       env:
         CERTBOT_VERSION: ${{ matrix.certbot-version }}
